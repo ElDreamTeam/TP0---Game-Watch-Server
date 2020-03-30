@@ -86,16 +86,9 @@ void process_request(int cod_op, int cliente_fd) {
 			sprintf(a, "%d", size);
 			log_info(logger, a);
 
-			//char* mensaje = malloc(size);
-			//printf("asd");
-			//log_info(logger, (char* )msg);
-			//printf("%s", (char*) msg);
+            log_info(logger,(char *)(msg));
 
-			char* hola = malloc(10);
-			hola = "hola rami.";
-			log_info(logger, hola);
-
-			//devolver_mensaje(msg, size, cliente_fd);
+			
 			free(msg);
 			break;
 		case 0:
