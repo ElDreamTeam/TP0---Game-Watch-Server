@@ -87,8 +87,9 @@ void process_request(int cod_op, int cliente_fd) {
 			log_info(logger, a);
 
             log_info(logger,(char *)(msg));
-
-			
+			log_info(logger,"LLEGA ACA");
+            devolver_mensaje(msg,size,cliente_fd);
+			log_info(logger,"Y LLEGA ACA");
 			free(msg);
 			break;
 		case 0:
