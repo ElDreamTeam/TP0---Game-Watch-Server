@@ -7,6 +7,8 @@
 
 #include"utils.h"
 
+t_log* logger;
+
 void iniciar_servidor(void)
 {
 	int socket_servidor;
@@ -36,12 +38,17 @@ void iniciar_servidor(void)
 
     freeaddrinfo(servinfo);
 
+
+    logger = iniciar_logger();
+    log_info(logger, "Servidor iniciado");
+
     while(1)
     	esperar_cliente(socket_servidor);
 }
 
 void esperar_cliente(int socket_servidor)
 {
+	log_info(logger, "...");
 	struct sockaddr_in dir_cliente;
 
 	int tam_direccion = sizeof(struct sockaddr_in);
@@ -50,6 +57,7 @@ void esperar_cliente(int socket_servidor)
 
 	pthread_create(&thread,NULL,(void*)serve_client,&socket_cliente);
 	pthread_detach(thread);
+
 
 }
 
@@ -62,25 +70,49 @@ void serve_client(int* socket)
 }
 
 void process_request(int cod_op, int cliente_fd) {
+	log_info(logger, "LLego algo");
 	int size;
 	void* msg;
+	//void* msg = malloc(11);
 		switch (cod_op) {
 		case MENSAJE:
+		//case 1:
+			log_info(logger, "Es un mensaje");
 			msg = recibir_mensaje(cliente_fd, &size);
-			devolver_mensaje(msg, size, cliente_fd);
+
+			log_info(logger, "ESCRBIR MENSAJE");
+
+			char* a = malloc(sizeof(int));
+			sprintf(a, "%d", size);
+			log_info(logger, a);
+
+			//char* mensaje = malloc(size);
+			//printf("asd");
+			//log_info(logger, (char* )msg);
+			//printf("%s", (char*) msg);
+
+			char* hola = malloc(10);
+			hola = "hola rami.";
+			log_info(logger, hola);
+
+			//devolver_mensaje(msg, size, cliente_fd);
 			free(msg);
 			break;
 		case 0:
+			log_info(logger, "shit 0");
 			pthread_exit(NULL);
 		case -1:
+			log_info(logger, "shit -1");
 			pthread_exit(NULL);
+		default:
+			log_info(logger, "shit default");
 		}
 }
 
 void* recibir_mensaje(int socket_cliente, int* size)
 {
 	void * buffer;
-
+	log_info(logger, "Analizando...");
 	recv(socket_cliente, size, sizeof(int), MSG_WAITALL);
 	buffer = malloc(*size);
 	recv(socket_cliente, buffer, *size, MSG_WAITALL);
@@ -123,5 +155,11 @@ void devolver_mensaje(void* payload, int size, int socket_cliente)
 	free(paquete->buffer->stream);
 	free(paquete->buffer);
 	free(paquete);
+}
+
+
+t_log* iniciar_logger(void)
+{
+	return log_create("log.log", "game-watch", true, LOG_LEVEL_INFO);
 }
 

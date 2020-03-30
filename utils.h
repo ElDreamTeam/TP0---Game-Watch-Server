@@ -51,5 +51,6 @@ void serve_client(int *socket);
 void* serializar_paquete(t_paquete* paquete, int bytes);
 void devolver_mensaje(void* payload, int size, int socket_cliente);
 
+t_log* iniciar_logger(void);
 
 #endif /* CONEXIONES_H_ */
