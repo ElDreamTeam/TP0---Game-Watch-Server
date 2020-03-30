@@ -80,16 +80,14 @@ void process_request(int cod_op, int cliente_fd) {
 			log_info(logger, "Es un mensaje");
 			msg = recibir_mensaje(cliente_fd, &size);
 
-			log_info(logger, "ESCRBIR MENSAJE");
+			log_info(logger, "MENSAJE RECIBIDO");
 
 			char* a = malloc(sizeof(int));
 			sprintf(a, "%d", size);
 			log_info(logger, a);
 
             log_info(logger,(char *)(msg));
-			log_info(logger,"LLEGA ACA");
             devolver_mensaje(msg,size,cliente_fd);
-			log_info(logger,"Y LLEGA ACA");
 			free(msg);
 			break;
 		case 0:
